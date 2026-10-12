@@ -20,6 +20,7 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
     "animejs": "^3.2.2",
     "babel-plugin-styled-components": "^2.1.4",
     "gatsby": "^5.13.7",
