@@ -3,18 +3,40 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
 import { navDelay, loaderDelay } from '@utils';
 import { usePrefersReducedMotion } from '@hooks';
+import HeroVisual from './heroVisual';
 
 const StyledHeroSection = styled.section`
-  ${({ theme }) => theme.mixins.flexCenter};
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   min-height: 100vh;
   height: 100vh;
   padding: 0;
 
+  @media (min-width: 1200px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   @media (max-height: 700px) and (min-width: 700px), (max-width: 360px) {
     height: auto;
     padding-top: var(--nav-height);
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 1 auto;
+    min-width: 0;
+
+    @media (min-width: 1200px) {
+      .big-heading {
+        font-size: clamp(40px, 5vw, 70px);
+      }
+    }
   }
 
   h1 {
@@ -77,22 +99,26 @@ const Hero = () => {
 
   return (
     <StyledHeroSection>
-      {prefersReducedMotion ? (
-        <>
-          {items.map((item, i) => (
-            <div key={i}>{item}</div>
-          ))}
-        </>
-      ) : (
-        <TransitionGroup component={null}>
-          {isMounted &&
-            items.map((item, i) => (
-              <CSSTransition key={i} classNames="fadeup" timeout={loaderDelay}>
-                <div style={{ transitionDelay: `${i + 1}00ms` }}>{item}</div>
-              </CSSTransition>
+      <div className="hero-text">
+        {prefersReducedMotion ? (
+          <>
+            {items.map((item, i) => (
+              <div key={i}>{item}</div>
             ))}
-        </TransitionGroup>
-      )}
+          </>
+        ) : (
+          <TransitionGroup component={null}>
+            {isMounted &&
+              items.map((item, i) => (
+                <CSSTransition key={i} classNames="fadeup" timeout={loaderDelay}>
+                  <div style={{ transitionDelay: `${i + 1}00ms` }}>{item}</div>
+                </CSSTransition>
+              ))}
+          </TransitionGroup>
+        )}
+      </div>
+
+      <HeroVisual show={prefersReducedMotion || isMounted} />
     </StyledHeroSection>
   );
 };
